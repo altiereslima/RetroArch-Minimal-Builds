@@ -1,4 +1,4 @@
-name: RetroArch Minimal Builds
+name: RetroArch Minimal Builds 
 on:
   workflow_dispatch:
 jobs:
