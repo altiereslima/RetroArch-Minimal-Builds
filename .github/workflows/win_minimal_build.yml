@@ -1,6 +1,9 @@
 name: RetroArch Minimal Builds 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - develop
 jobs:
   Windows:
     name: Build RetroArch Windows Minimal
