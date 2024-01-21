@@ -60,10 +60,8 @@ jobs:
     - name: Zip just the executables and libs
       working-directory: RetroArch
       run: 7z a -mx=9 RetroArch-Win-x86_64-Minimal.7z *.exe *.dll
-    - name: Upload Minimal 7z
-      uses: svenstaro/upload-release-action@v2
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: RetroArch/RetroArch-Win-x86_64-Minimal.7z
-        tag: Main
-        overwrite: true
+        name: RALibretro
+        path: ./
