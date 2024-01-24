@@ -1,6 +1,16 @@
 name: RetroArch Minimal Builds
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
 
 jobs:
   Windows:
