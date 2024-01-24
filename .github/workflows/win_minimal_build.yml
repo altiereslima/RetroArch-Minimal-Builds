@@ -1,9 +1,7 @@
-name: RetroArch Minimal Builds 
+name: RetroArch Minimal Builds
 on:
-  push:
-    branches:
-      - master
-      - develop
+  workflow_dispatch:
+
 jobs:
   Windows:
     name: Build RetroArch Windows Minimal
@@ -26,7 +24,7 @@ jobs:
           p7zip
     - uses: actions/checkout@v3
     - name: Fetch the source
-      run: git clone https://github.com/libretro/RetroArch.git
+      run: git clone https://github.com/altiereslima/RetroArch.git
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
@@ -47,6 +45,14 @@ jobs:
         file: RetroArch/RetroArch-Win-x86_64-Super_Minimal.7z
         tag: Main
         overwrite: true
+
+    # Adiciona a nova etapa para criar um artefato
+    - name: Create Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: super-minimal-artifact
+        path: RetroArch/
+
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
@@ -63,8 +69,17 @@ jobs:
     - name: Zip just the executables and libs
       working-directory: RetroArch
       run: 7z a -mx=9 RetroArch-Win-x86_64-Minimal.7z *.exe *.dll
-    - name: Upload Artifact
+    - name: Upload Minimal 7z
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: RetroArch/RetroArch-Win-x86_64-Minimal.7z
+        tag: Main
+        overwrite: true
+
+    # Adiciona a nova etapa para criar um artefato
+    - name: Create Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: RALibretro
-        path: ./
+        name: minimal-artifact
+        path: RetroArch/
