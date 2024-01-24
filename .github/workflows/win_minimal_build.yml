@@ -1,17 +1,6 @@
-name: RetroArch Minimal Builds
+name: RetroArch Minimal Builds 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '*.md'
-      - 'docs/**'
-  pull_request:
-    types: [opened, synchronize]
-    paths-ignore:
-      - '*.md'
-      - 'docs/**'
-
+  workflow_dispatch:
 jobs:
   Windows:
     name: Build RetroArch Windows Minimal
@@ -34,7 +23,7 @@ jobs:
           p7zip
     - uses: actions/checkout@v3
     - name: Fetch the source
-      run: git clone https://github.com/altiereslima/RetroArch.git
+      run: git clone https://github.com/libretro/RetroArch.git
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
@@ -55,14 +44,6 @@ jobs:
         file: RetroArch/RetroArch-Win-x86_64-Super_Minimal.7z
         tag: Main
         overwrite: true
-
-    # Adiciona a nova etapa para criar um artefato
-    - name: Create Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: super-minimal-artifact
-        path: RetroArch/
-
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
@@ -86,10 +67,3 @@ jobs:
         file: RetroArch/RetroArch-Win-x86_64-Minimal.7z
         tag: Main
         overwrite: true
-
-    # Adiciona a nova etapa para criar um artefato
-    - name: Create Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: minimal-artifact
-        path: RetroArch/
