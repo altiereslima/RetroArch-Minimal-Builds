@@ -1,6 +1,17 @@
 name: RetroArch Minimal Builds
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+
 jobs:
   Windows:
     name: Build RetroArch Windows Minimal
@@ -27,7 +38,7 @@ jobs:
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
-        ./configure --disable-overlay --disable-networking --disable-video_filter --disable-glsl --disable-bsv_movie --disable-dsp_filter --disable-cheats --disable-rewind --disable-accessibility --disable-translate --disable-cdrom --disable-imageviewer --disable-qt --disable-ffmpeg --disable-sdl2 --disable-blissbox --disable-xmb --disable-materialui --disable-d3d9 --disable-d3d10 --disable-libretrodb --disable-audiomixer --disable-dsound --disable-flac --disable-dr_mp3 --disable-rtga --disable-rjpeg --disable-rbmp --disable-freetype --disable-cc_resampler --disable-nearest_resampler --disable-crtswitchres --disable-7zip --disable-patch
+        ./configure --disable-overlay --disable-networking --disable-video_filter --disable-glsl --disable-bsv_movie --disable-dsp_filter --disable-cheats --disable-rewind --disable-accessibility --disable-translate --disable-cdrom --disable-imageviewer --disable-qt --disable-ffmpeg --disable-sdl2 --disable-blissbox --disable-xmb --disable-materialui --disable-d3d9 --disable-d3d10 --disable-libretrodb --disable-audiomixer --disable-dsound --disable-flac --disable-dr_mp3 --disable-rtga --disable-rjpeg --disable-rbmp --disable-freetype --disable-cc_resampler --disable-nearest_resampler --disable-crtswitchres --disable-chd --disable-7zip --disable-patch
         make -j8
         for i in $(seq 3); do for bin in $(ntldd -R *exe | grep -i mingw | cut -d">" -f2 | cut -d" " -f2); do cp -vu "$bin" . ; done; done
         rm nvdaControllerClient64.dll
@@ -44,6 +55,14 @@ jobs:
         file: RetroArch/RetroArch-Win-x86_64-Super_Minimal.7z
         tag: Main
         overwrite: true
+
+    # Adiciona a nova etapa para criar um artefato
+    - name: Create Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: super-minimal-artifact
+        path: RetroArch/
+
     - shell: msys2 {0}
       working-directory: RetroArch
       run: |
@@ -67,3 +86,10 @@ jobs:
         file: RetroArch/RetroArch-Win-x86_64-Minimal.7z
         tag: Main
         overwrite: true
+
+    # Adiciona a nova etapa para criar um artefato
+    - name: Create Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: minimal-artifact
+        path: RetroArch/
